@@ -1,0 +1,42 @@
+{
+  "name": "opencode-advisor",
+  "version": "0.1.0",
+  "description": "opencode plugin: advisor strategy — lets a smaller model consult a larger model when stuck",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "./server": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "advisor",
+    "ai-advisor",
+    "llm"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/opencode-advisor.git"
+  },
+  "dependencies": {
+    "@opencode-ai/plugin": "^1.4.6"
+  },
+  "devDependencies": {
+    "@opencode-ai/sdk": "*",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": ">=1.4.0"
+  }
+}

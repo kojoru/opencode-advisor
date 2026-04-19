@@ -1,53 +1,33 @@
-name: Publish to npm
+name: Publish Package
 
 on:
-  release:
-    types: [created]
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  id-token: write  # Required for OIDC provenance
+  contents: read
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '24.x'
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
-      - run: npm ci
-
-      - run: npm run build
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist/
-
-  publish:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '24.x'
-          registry-url: 'https://registry.npmjs.org'
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist/
-
-      - name: Set version from release tag
+      - name: Set version from tag
         run: |
-          TAG="${{ github.event.release.tag_name }}"
-          VERSION="${TAG#v}"
+          VERSION="${GITHUB_REF_NAME#v}"
           npm version "$VERSION" --no-git-tag-version
 
-      - run: npm publish --access public
+      - run: npm ci
+      - run: npm run build
+      - run: npm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
